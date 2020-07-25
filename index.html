@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer Bank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="login-area">
+            <h1 class="text-center mt-5">Welcome To Pioneer Bank</h1>
+            <div class="submit-area">
+                <div class="bank-title d-flex justify-content-between">
+                    <h4>Login</h4>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#user-info">
+                        user info
+                    </button>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="user-info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Pioneer Bank User Information</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h3 class="text-center">Person-1</h3>
+                                <p><span>username : fayez</span><br> <span>password : 11223</span></p>
+                                <h3 class="text-center">Person-2</h3>
+                                <p><span>username : smith</span><br> <span>password : 12345</span></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <input type="text" id="username" class="form-control" placeholder="username"><br>
+                <input type="password" id="password" class="form-control" placeholder="Password"><br>
+                <button id="login" class="btn btn-success">Login</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div id="transaction-area">
+            <h1 class="mt-5 text-center">Transaction Area</h1> <br>
+            <button class="btn btn-primary float-right" id="logout">Logout</button> <br>
+            <div class="row mt-5 text-center text-white">
+                <div class="col-md-4">
+                    <div class="deposit p-4 status">
+                        <h4>Deposit</h4>
+                        <h2>$ <span id="currentDeposit">80</span></h2>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="withdraw p-4 status">
+                        <h4>Withdraw</h4>
+                        <h2>$ <span id="currentWithdraw">30</span></h2>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="balance p-4 status">
+                        <h4>Balance</h4>
+                        <h2>$ <span id="currentBalance">80</span></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="submit-area">
+                        <h3>Deposit</h3>
+                        <br>
+                        <input type="text" class="form-control" id="depositAmount" placeholder="$Amount you want to deposit"><br>
+                        <button id="addDeposit" class="btn btn-success">Deposit</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="submit-area">
+                        <h3>Withdraw</h3>
+                        <br>
+                        <input type="text" class="form-control" id="withdrawAmount" placeholder="$Amount you want to withdraw"><br>
+                        <button id="addWithdraw" class="btn btn-success">Withdraw</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Script-->
+    <script>
+        //login button event handler
+        const login = document.getElementById('login');
+        login.addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const user1 = 'fayez'
+            const user2 = 'smith'
+            const pass1 = 11223
+            const pass2 = 12345
+            if (username == user1 || username == user2 && password == pass1 || password == pass2) {
+                const loginArea = document.getElementById('login-area');
+                loginArea.style.display = "none";
+                const transactionArea = document.getElementById('transaction-area');
+                transactionArea.style.display = "block";
+            } else {
+                alert('Invalid username or password');
+            }
+        });
+        //logout account
+        const logout = document.getElementById('logout');
+        logout.addEventListener('click', function() {
+            document.getElementById('transaction-area').style.display = "none";
+            document.getElementById('login-area').style.display = "block";
+
+        })
+
+        //deposit button event handler
+        const addDeposit = document.getElementById('addDeposit');
+        addDeposit.addEventListener("click", function() {
+            const depositAmount = document.getElementById('depositAmount').value;
+            if (depositAmount == "" || depositAmount <= 0) {
+                alert('Sorry! You Enter an invalid deposit amount.');
+            } else {
+                const depositNumber = getInputNumber('depositAmount');
+                document.getElementById('depositAmount').value = "";
+
+                updateSpanText('currentDeposit', depositNumber);
+                updateSpanText('currentBalance', depositNumber);
+            }
+        });
+        //withdraw button event handler
+        const addWithdraw = document.getElementById('addWithdraw');
+        addWithdraw.addEventListener("click", function() {
+            const withdrawAmount = document.getElementById('withdrawAmount').value;
+            if (withdrawAmount == "" || withdrawAmount <= 0) {
+                alert('Sorry! You Enter an invalid withdraw amount.');
+            } else {
+                const withdrawNumber = getInputNumber('withdrawAmount');
+                document.getElementById('withdrawAmount').value = "";
+                updateSpanText('currentWithdraw', withdrawNumber);
+                updateSpanText('currentBalance', -1 * withdrawNumber);
+            }
+        });
+
+        //get input number function
+        function getInputNumber(id) {
+            const amount = document.getElementById(id).value;
+            const amountNumber = parseFloat(amount);
+            return amountNumber;
+        }
+
+        function updateSpanText(id, depositNumber) {
+            const currentBalance = document.getElementById(id).innerText;
+            const currentBalanceNumber = parseFloat(currentBalance);
+            const totalBalance = depositNumber + currentBalanceNumber;
+            document.getElementById(id).innerText = totalBalance;
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+
+</html>
